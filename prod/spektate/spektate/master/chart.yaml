@@ -61,10 +61,18 @@ spec:
     spec:
       imagePullSecrets:
         - name: 
+      volumes:
+        - name: spektate-volume
+          secret:
+            secretName: spektate-secrets
       containers:
         - name: spektate
           image: "andrebriggs.azurecr.io/samiyaakhtar/spektate-spektate:master-20200410.8"
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - mountPath: /var/spektate 
+            name: spektate-volume
+            readOnly: true
           env:
           - name: REACT_APP_STORAGE_ACCESS_KEY
             valueFrom:
