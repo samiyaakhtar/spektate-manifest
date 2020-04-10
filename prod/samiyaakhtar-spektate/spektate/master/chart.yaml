@@ -1,0 +1,90 @@
+---
+---
+# Source: spektate/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: chart-spektate
+  labels:
+    app: spektate
+    chart: spektate-1
+    release: chart
+    heritage: Tiller
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+      name: web
+  selector:
+    app: spektate
+    release: chart
+
+---
+
+# Source: spektate/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chart-spektate
+  labels:
+    app: spektate
+    chart: spektate-1
+    release: chart
+    heritage: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spektate
+      release: chart
+  template:
+    metadata:
+      labels:
+        app: spektate
+        release: chart
+    spec:
+      imagePullSecrets:
+        - name: 
+      containers:
+        - name: spektate
+          image: "mcr.microsoft.com/k8s/bedrock/spektate:latest"
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: REACT_APP_STORAGE_ACCESS_KEY
+            value: 
+          - name: REACT_APP_STORAGE_TABLE_NAME
+            value: 
+          - name: REACT_APP_STORAGE_PARTITION_KEY
+            value: 
+          - name: REACT_APP_STORAGE_ACCOUNT_NAME
+            value: 
+          - name: REACT_APP_PIPELINE_PROJECT
+            value: 
+          - name: REACT_APP_PIPELINE_ORG
+            value: 
+          - name: REACT_APP_PIPELINE_ACCESS_TOKEN
+            value: 
+          - name: REACT_APP_MANIFEST
+            value: 
+          - name: REACT_APP_MANIFEST_ACCESS_TOKEN
+            value: 
+          - name: REACT_APP_GITHUB_MANIFEST_USERNAME
+            value: 
+          - name: REACT_APP_SOURCE_REPO_ACCESS_TOKEN
+            value: 
+          ports:
+            - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          resources:
+            {}
+            
+

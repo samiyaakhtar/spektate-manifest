@@ -1,0 +1,52 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: spektate-master
+spec:
+  routes:
+    - kind: Rule
+      match: 'PathPrefix(`/spektate`) && Headers(`Ring`, `master`)'
+      middlewares:
+        - name: spektate-master
+      services:
+        - name: spektate-master
+          port: 5000
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: spektate
+spec:
+  routes:
+    - kind: Rule
+      match: PathPrefix(`/spektate`)
+      middlewares:
+        - name: spektate
+      services:
+        - name: spektate-master
+          port: 5000
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: spektate-master
+spec:
+  stripPrefix:
+    forceSlash: false
+    prefixes:
+      - /spektate
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: spektate
+spec:
+  stripPrefix:
+    forceSlash: false
+    prefixes:
+      - /spektate
+
