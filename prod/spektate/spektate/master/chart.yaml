@@ -49,7 +49,7 @@ spec:
         - name: 
       containers:
         - name: spektate
-          image: "mcr.microsoft.com/k8s/bedrock/spektate:latest"
+          image: "andrebriggs.azurecr.io/samiyaakhtar/spektate-spektate:master-20200410.6"
           imagePullPolicy: IfNotPresent
           env:
           - name: REACT_APP_STORAGE_ACCESS_KEY
