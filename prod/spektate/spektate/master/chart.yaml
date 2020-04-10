@@ -70,7 +70,7 @@ spec:
           image: "andrebriggs.azurecr.io/samiyaakhtar/spektate-spektate:master-20200410.8"
           imagePullPolicy: IfNotPresent
           volumeMounts:
-          - mountPath: /var/spektate 
+          - mountPath: /var/run/secrets/
             name: spektate-volume
             readOnly: true
           env:
