@@ -1,5 +1,19 @@
 ---
 ---
+# Source: spektate/templates/loadbalancer.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer
+spec:
+  selector:
+    app: spektate
+  ports:
+    - port: 80
+      targetPort: 5000
+  type: LoadBalancer
+---
+
 # Source: spektate/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -53,27 +67,60 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
           - name: REACT_APP_STORAGE_ACCESS_KEY
-            value: 
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_STORAGE_ACCESS_KEY
           - name: REACT_APP_STORAGE_TABLE_NAME
-            value: 
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_STORAGE_TABLE_NAME
           - name: REACT_APP_STORAGE_PARTITION_KEY
-            value: 
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_STORAGE_PARTITION_KEY
           - name: REACT_APP_STORAGE_ACCOUNT_NAME
-            value: 
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_STORAGE_ACCOUNT_NAME
           - name: REACT_APP_PIPELINE_PROJECT
-            value: 
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_PIPELINE_PROJECT
           - name: REACT_APP_PIPELINE_ORG
-            value: 
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_PIPELINE_ORG
           - name: REACT_APP_PIPELINE_ACCESS_TOKEN
-            value: 
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_PIPELINE_ACCESS_TOKEN
           - name: REACT_APP_MANIFEST
-            value: 
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_MANIFEST
           - name: REACT_APP_MANIFEST_ACCESS_TOKEN
-            value: 
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_MANIFEST_ACCESS_TOKEN
           - name: REACT_APP_GITHUB_MANIFEST_USERNAME
-            value: 
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_GITHUB_MANIFEST_USERNAME
           - name: REACT_APP_SOURCE_REPO_ACCESS_TOKEN
-            value: 
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_SOURCE_REPO_ACCESS_TOKEN
           ports:
             - containerPort: 5000
           livenessProbe:
