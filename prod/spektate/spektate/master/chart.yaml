@@ -65,6 +65,9 @@ spec:
         - name: spektate-volume
           secret:
             secretName: spektate-secrets
+        - name: spektate-config-volume
+          configMap:
+            name: spektate-config
       containers:
         - name: spektate
           image: "andrebriggs.azurecr.io/samiyaakhtar/spektate-spektate:master-20200410.8"
@@ -73,6 +76,8 @@ spec:
           - mountPath: /var/run/secrets/
             name: spektate-volume
             readOnly: true
+          - name: spektate-config-volume
+            mountPath: /etc/config
           env:
           - name: REACT_APP_STORAGE_ACCESS_KEY
             valueFrom:
