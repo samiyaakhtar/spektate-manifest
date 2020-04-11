@@ -35,3 +35,103 @@ spec:
     app: spektate
     release: chart
 
+---
+
+# Source: spektate/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chart-spektate
+  labels:
+    app: spektate
+    chart: spektate-1
+    release: chart
+    heritage: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spektate
+      release: chart
+  template:
+    metadata:
+      labels:
+        app: spektate
+        release: chart
+    spec:
+      imagePullSecrets:
+        - name: 
+      containers:
+        - name: spektate
+          image: "andrebriggs.azurecr.io/samiyaakhtar/spektate-spektate:master-20200411.1"
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: REACT_APP_STORAGE_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_STORAGE_ACCESS_KEY
+          - name: REACT_APP_STORAGE_TABLE_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_STORAGE_TABLE_NAME
+          - name: REACT_APP_STORAGE_PARTITION_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_STORAGE_PARTITION_KEY
+          - name: REACT_APP_STORAGE_ACCOUNT_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_STORAGE_ACCOUNT_NAME
+          - name: REACT_APP_PIPELINE_PROJECT
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_PIPELINE_PROJECT
+          - name: REACT_APP_PIPELINE_ORG
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_PIPELINE_ORG
+          - name: REACT_APP_PIPELINE_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_PIPELINE_ACCESS_TOKEN
+          - name: REACT_APP_MANIFEST
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_MANIFEST
+          - name: REACT_APP_MANIFEST_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_MANIFEST_ACCESS_TOKEN
+          - name: REACT_APP_GITHUB_MANIFEST_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: spektate-config
+                key: REACT_APP_GITHUB_MANIFEST_USERNAME
+          - name: REACT_APP_SOURCE_REPO_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: spektate-secrets
+                key: REACT_APP_SOURCE_REPO_ACCESS_TOKEN
+          ports:
+            - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          resources:
+            {}
+            
+
