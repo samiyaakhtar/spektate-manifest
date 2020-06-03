@@ -63,7 +63,7 @@ spec:
         - name: 
       containers:
         - name: spektate
-          image: "andrebriggs.azurecr.io/samiyaakhtar/spektate-spektate:master-20200520.1"
+          image: "andrebriggs.azurecr.io/samiyaakhtar/spektate-spektate:master-20200603.1"
           imagePullPolicy: IfNotPresent
           env:
           - name: REACT_APP_STORAGE_ACCESS_KEY
